@@ -243,5 +243,14 @@ public class BitString {
 		int dec = bigInt.intValue();
 		setValue(dec);
 	}
-
+	
+	@Override
+	public String toString() {
+		StringBuilder returnMe = new StringBuilder(); 
+		for (char c: mBits) {
+			returnMe.append(c);
+		}
+		return returnMe.toString();
+		
+	}
 }

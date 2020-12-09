@@ -44,33 +44,68 @@ public class Computer {
      * @param theRegister the register specified
      * @return the BitString at the register
      */
-    public BitString getRegister(int theRegister) {
-        return mA;
+    public BitString getRegister() {
+    	return mA.copy();
     }
 
 	public void setRegister(BitString theData) {
 		mA = theData;
 	}
 
-	/**
-	 * Loads a 24 bit word into memory at the given address. 
-	 * @param address memory address
-	 * @param word data or instruction or address to be loaded into memory
-	 */
-	public void loadWord(int address, BitString word) {
-		if (address < 0 || address >= MAX_MEMORY) {
-			throw new IllegalArgumentException("Invalid address");
-		}
-		mMemory[address] = word;
-	}
+//	/**
+//	 * Loads a 24 bit word into memory at the given address. 
+//	 * @param address memory address
+//	 * @param word data or instruction or address to be loaded into memory
+//	 */
+//	public void loadWord(int address, BitString word) {
+//		if (address < 0 || address >= MAX_MEMORY) {
+//			throw new IllegalArgumentException("Invalid address");
+//		}
+//		mMemory[address] = word;
+//	}
 	
     /**
      * Loads a BitString into memory at current address, then updates address by one
      * @param theBits The bit string instruction (in binary)
      */
-    public void loadWord(BitString theBits) {
-    	mMemory[address] = theBits;
-    	address++;
+    public void loadWord(String theBits) {
+    	// Convert bit lines into 8-bit bitstrings and load into computer.
+		// Handles bit lines that contain 24, 16, or 8 bits.
+    	theBits = theBits.replaceAll(" ", "");
+		if (theBits.length() == 24) {          
+			BitString first = new BitString();
+			first.setBits(theBits.substring(0, 8).toCharArray());
+			mMemory[address] = first;
+	    	address++;
+			
+			BitString second = new BitString();
+			second.setBits(theBits.substring(8, 16).toCharArray());
+			mMemory[address] = second;
+	    	address++;
+			
+			BitString third = new BitString();
+			third.setBits(theBits.substring(16, 24).toCharArray());
+			mMemory[address] = third;
+	    	address++;
+			
+		} else if (theBits.length() == 16) {          
+			BitString first = new BitString();
+			first.setBits(theBits.substring(0, 8).toCharArray());
+			mMemory[address] = first;
+	    	address++;
+			
+			BitString second = new BitString();
+			second.setBits(theBits.substring(8, 16).toCharArray());
+			mMemory[address] = second;
+	    	address++;
+			
+		} else if (theBits.length() == 8) {
+			BitString bits = new BitString();
+			bits.setBits(theBits.toCharArray());
+			mMemory[address] = bits;
+	    	address++;
+		}
+    	
     }
 	
     /**
@@ -161,8 +196,8 @@ public class Computer {
      */
     public void executeAddI() {
     	BitString operand = concatenateWords();
-    	int sum = mA.getValue() + operand.getValue();
-    	mA.setValue(sum);
+    	int sum = mA.getValue2sComp() + operand.getValue2sComp();
+    	mA.setValue2sComp(sum);
     }
 
     /**
@@ -171,10 +206,10 @@ public class Computer {
      */
     public void executeAddD() {
     	BitString operand = concatenateWords();
-    	int address = operand.getValue();
+    	int address = operand.getValue2sComp();
     	BitString memBits = concatenateWords(address);
-    	int sum = mA.getValue() + memBits.getValue();
-    	mA.setValue(sum);
+    	int sum = mA.getValue2sComp() + memBits.getValue2sComp();
+    	mA.setValue2sComp(sum);
     	
     }
     
@@ -184,8 +219,8 @@ public class Computer {
      */
     public void executeSubtractI() {
     	BitString operand = concatenateWords();    	
-    	int diff = mA.getValue() - operand.getValue();
-    	mA.setValue(diff);
+    	int diff = mA.getValue2sComp() - operand.getValue2sComp();
+    	mA.setValue2sComp(diff);
     }
     
     /**
@@ -194,10 +229,10 @@ public class Computer {
      */
     public void executeSubtractD() {
     	BitString operand = concatenateWords();
-    	int address = operand.getValue();
+    	int address = operand.getValue2sComp();
     	BitString memBits = concatenateWords(address);
-    	int diff = mA.getValue() - memBits.getValue();
-    	mA.setValue(diff);
+    	int diff = mA.getValue2sComp() - memBits.getValue2sComp();
+    	mA.setValue2sComp(diff);
     }
     
     /**
