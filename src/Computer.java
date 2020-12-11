@@ -256,6 +256,75 @@ public class Computer {
     	mA.setValue2sComp(diff);
     }
     
+
+    /**
+     * Performs bitwise AND from the A register, immediate instruction.
+     * (specifier: 1001 0000)	
+     */
+    public void executeAndI() {
+    	BitString operand = concatenateWords();
+    	int and = mA.getValue2sComp() & operand.getValue2sComp();
+    	mA.setValue2sComp(and);
+    }
+    
+    /**
+     * Performs bitwise AND from the A register, direct instruction.
+     * (specifier: 10010001)	
+     */
+    public void executeAndD() {
+    	BitString operand = concatenateWords();
+    	int address = operand.getValue2sComp();
+    	BitString memBits = concatenateWords(address);
+    	int and = mA.getValue2sComp() & memBits.getValue2sComp();
+    	mA.setValue2sComp(and);
+    }
+    
+    /**
+     * Performs bitwise OR from the A register, immediate instruction.
+     * (specifier: 1010 0000)	
+     */
+    public void executeOrI() {
+    	BitString operand = concatenateWords();
+    	int or = operand.getValue2sComp() | mA.getValue2sComp();
+    	mA.setValue2sComp(or);
+    }
+    
+    /**
+     * Performs bitwise OR from the A register, direct instruction.
+     * (specifier: 10100001)	
+     */
+    public void executeOrD() {
+    	BitString operand = concatenateWords();
+    	int address = operand.getValue2sComp();
+    	BitString memBits = concatenateWords(address);
+    	int or = memBits.getValue2sComp() | mA.getValue2sComp();
+    	mA.setValue2sComp(or);
+    }
+    
+    /**
+     * Sets NZVC status bits based off of the difference of the 
+     * A register and operand, immediate instruction.
+     * (specifier: 10110000)
+     */
+    public void executeCPr() {
+    	int diff = 0;
+    	BitString operand = concatenateWords();
+    	diff = mA.getValue2sComp() - operand.getValue2sComp();
+    	// TODO: set status bits based off of the difference
+    }
+
+    /**
+     * Performs a branch operation if C status bit is true, 
+     * immediate instruction.
+     * (specifier: 0001 0100)
+     */
+    public void executeBRC() {
+    	BitString operand = concatenateWords();
+    	//if(Calculator.getCFlag()) {
+    		//mPC = operand.copy();
+    	//}
+    }
+    
     /**
      * Performs load the operand into the A register, immediate instruction.
      * (specifier: 1100 0000)
