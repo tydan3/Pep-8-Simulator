@@ -125,4 +125,14 @@ class ComputerTest {
 		assertTrue("0000000001000100".equals(testComputer.getMemory(15).toString() 
 				+ testComputer.getMemory(16).toString()));
 	}
+	
+	@Test
+	void executeBRTest() {
+		testComputer.loadWord("0000 0100 0000 0000 0000 0100");
+		testComputer.loadWord("0000 0000");
+		testComputer.loadWord("0101 0000 0000 0000 0100 1000");
+		testComputer.execute();
+		assertEquals("H", testComputer.getOutput());
+		
+	}
 }

@@ -13,7 +13,6 @@ public class Computer {
     private BitString mPC;
     private BitString mIR;
     private BitString mA;
-    private int address;
     
 	private StringBuilder output;
 
@@ -27,7 +26,6 @@ public class Computer {
         mIR.setValue(0);
         mA = new BitString();
         mA.setValue(0);
-        address = 0;
 
         output = new StringBuilder();
         
@@ -51,18 +49,6 @@ public class Computer {
 	public void setRegister(BitString theData) {
 		mA = theData;
 	}
-
-//	/**
-//	 * Loads a 24 bit word into memory at the given address. 
-//	 * @param address memory address
-//	 * @param word data or instruction or address to be loaded into memory
-//	 */
-//	public void loadWord(int address, BitString word) {
-//		if (address < 0 || address >= MAX_MEMORY) {
-//			throw new IllegalArgumentException("Invalid address");
-//		}
-//		mMemory[address] = word;
-//	}
 	
     /**
      * Loads a BitString into memory at current address, then updates address by one
@@ -75,38 +61,73 @@ public class Computer {
 		if (theBits.length() == 24) {          
 			BitString first = new BitString();
 			first.setBits(theBits.substring(0, 8).toCharArray());
-			mMemory[address] = first;
-	    	address++;
+			mMemory[mPC.getValue()] = first;
+			mPC.addOne();
 			
 			BitString second = new BitString();
 			second.setBits(theBits.substring(8, 16).toCharArray());
-			mMemory[address] = second;
-	    	address++;
+			mMemory[mPC.getValue()] = second;
+			mPC.addOne();
 			
 			BitString third = new BitString();
 			third.setBits(theBits.substring(16, 24).toCharArray());
-			mMemory[address] = third;
-	    	address++;
+			mMemory[mPC.getValue()] = third;
+			mPC.addOne();
 			
 		} else if (theBits.length() == 16) {          
 			BitString first = new BitString();
 			first.setBits(theBits.substring(0, 8).toCharArray());
-			mMemory[address] = first;
-	    	address++;
+			mMemory[mPC.getValue()] = first;
+			mPC.addOne();
 			
 			BitString second = new BitString();
 			second.setBits(theBits.substring(8, 16).toCharArray());
-			mMemory[address] = second;
-	    	address++;
+			mMemory[mPC.getValue()] = second;
+			mPC.addOne();
 			
 		} else if (theBits.length() == 8) {
 			BitString bits = new BitString();
 			bits.setBits(theBits.toCharArray());
-			mMemory[address] = bits;
-	    	address++;
+			mMemory[mPC.getValue()] = bits;
+			mPC.addOne();
 		}
     	
     }
+    
+	/**
+	 * Loads a 24 bit word into memory at the given address. 
+	 * @param address memory address
+	 * @param word data or instruction or address to be loaded into memory
+	 */
+	public void loadWord(String theBits, int theAddress) {
+		if (theBits.length() == 24) {          
+			BitString first = new BitString();
+			first.setBits(theBits.substring(0, 8).toCharArray());
+			mMemory[theAddress] = first;
+			
+			BitString second = new BitString();
+			second.setBits(theBits.substring(8, 16).toCharArray());
+			mMemory[theAddress + 1] = second;
+			
+			BitString third = new BitString();
+			third.setBits(theBits.substring(16, 24).toCharArray());
+			mMemory[theAddress + 2] = third;
+			
+		} else if (theBits.length() == 16) {          
+			BitString first = new BitString();
+			first.setBits(theBits.substring(0, 8).toCharArray());
+			mMemory[theAddress] = first;
+			
+			BitString second = new BitString();
+			second.setBits(theBits.substring(8, 16).toCharArray());
+			mMemory[theAddress + 1] = second;
+			
+		} else if (theBits.length() == 8) {
+			BitString first = new BitString();
+			first.setBits(theBits.substring(0, 8).toCharArray());
+			mMemory[theAddress] = first;
+		}
+	}
 	
     /**
      * Returns the BitString at address of theMemory
@@ -262,40 +283,14 @@ public class Computer {
     public void executeSt() {
     	BitString bitsA = mA.copy();
     	String stringA = String.copyValueOf(bitsA.getBits());
-    	
     	BitString operand = concatenateWords();
-    	int address = operand.getValue();
-    	
-    	// Convert Register A bits into 8-bit bitstrings and stores them to addresses.
-    	// Handles Register A when it contains 24, 16, or 8 bits.
-		if (stringA.length() == 24) {          
-			BitString first = new BitString();
-			first.setBits(stringA.substring(0, 8).toCharArray());
-			mMemory[address] = first;
-			
-			BitString second = new BitString();
-			second.setBits(stringA.substring(8, 16).toCharArray());
-			mMemory[address + 1] = second;
-			
-			BitString third = new BitString();
-			third.setBits(stringA.substring(16, 24).toCharArray());
-			mMemory[address + 2] = third;
-			
-		} else if (stringA.length() == 16) {          
-			BitString first = new BitString();
-			first.setBits(stringA.substring(0, 8).toCharArray());
-			mMemory[address] = first;
-			
-			BitString second = new BitString();
-			second.setBits(stringA.substring(8, 16).toCharArray());
-			mMemory[address + 1] = second;
-			
-		} else if (stringA.length() == 8) {
-			BitString first = new BitString();
-			first.setBits(stringA.substring(0, 8).toCharArray());
-			mMemory[address] = first;
-		}
-		
+    	int opAddress = operand.getValue();
+    	loadWord(stringA, opAddress);		
+    }
+    
+    public void executeBR() {
+    	BitString operand = concatenateWords();
+    	mPC.setValue(operand.getValue());
     }
 
     /**
@@ -318,6 +313,9 @@ public class Computer {
             specifier = specifierStr.getValue();
 
             switch (specifier) {
+            	case 4:					//(specifier: 0000 0100)
+            		executeBR();		//Branch unconditional
+            	break;
                 case 80: 				//(specifier: 0101 0000)
                     executeChOutI();	//Char Output Immediate
                     break;
