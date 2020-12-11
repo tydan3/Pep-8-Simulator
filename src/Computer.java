@@ -9,17 +9,19 @@ public class Computer {
 
     private final static int MAX_MEMORY = 24; //Feel free to increase if necessary
 
+    private Calculator bitCalc;
     private BitString mMemory[];
     private BitString mPC;
     private BitString mIR;
     private BitString mA;
-    
-	private StringBuilder output;
+
+    private StringBuilder output;
 
     /**
      * Initializes initial state
      */
     public Computer() {
+        bitCalc = new Calculator();
         mPC = new BitString();
         mPC.setValue(0);
         mIR = new BitString();
@@ -28,107 +30,106 @@ public class Computer {
         mA.setValue(0);
 
         output = new StringBuilder();
-        
+
         mMemory = new BitString[MAX_MEMORY];
         for (int i = 0; i < MAX_MEMORY; i++) {
             mMemory[i] = new BitString();
             mMemory[i].setBits(new char [] {'0','0', '0','0', '0','0', '0','0'});
         }
-        
+
     }
 
     /**
      * Returns the BitString at the register specified by theRegister
-     * @param theRegister the register specified
      * @return the BitString at the register
      */
     public BitString getRegister() {
-    	return mA.copy();
+        return mA.copy();
     }
 
-	public void setRegister(BitString theData) {
-		mA = theData;
-	}
-	
+    public void setRegister(BitString theData) {
+        mA = theData;
+    }
+
     /**
      * Loads a BitString into memory at current address, then updates address by one
      * @param theBits The bit string instruction (in binary)
      */
     public void loadWord(String theBits) {
-    	// Convert bit lines into 8-bit bitstrings and load into computer.
-		// Handles bit lines that contain 24, 16, or 8 bits.
-    	theBits = theBits.replaceAll(" ", "");
-		if (theBits.length() == 24) {          
-			BitString first = new BitString();
-			first.setBits(theBits.substring(0, 8).toCharArray());
-			mMemory[mPC.getValue()] = first;
-			mPC.addOne();
-			
-			BitString second = new BitString();
-			second.setBits(theBits.substring(8, 16).toCharArray());
-			mMemory[mPC.getValue()] = second;
-			mPC.addOne();
-			
-			BitString third = new BitString();
-			third.setBits(theBits.substring(16, 24).toCharArray());
-			mMemory[mPC.getValue()] = third;
-			mPC.addOne();
-			
-		} else if (theBits.length() == 16) {          
-			BitString first = new BitString();
-			first.setBits(theBits.substring(0, 8).toCharArray());
-			mMemory[mPC.getValue()] = first;
-			mPC.addOne();
-			
-			BitString second = new BitString();
-			second.setBits(theBits.substring(8, 16).toCharArray());
-			mMemory[mPC.getValue()] = second;
-			mPC.addOne();
-			
-		} else if (theBits.length() == 8) {
-			BitString bits = new BitString();
-			bits.setBits(theBits.toCharArray());
-			mMemory[mPC.getValue()] = bits;
-			mPC.addOne();
-		}
-    	
+        // Convert bit lines into 8-bit bitstrings and load into computer.
+        // Handles bit lines that contain 24, 16, or 8 bits.
+        theBits = theBits.replaceAll(" ", "");
+        if (theBits.length() == 24) {
+            BitString first = new BitString();
+            first.setBits(theBits.substring(0, 8).toCharArray());
+            mMemory[mPC.getValue()] = first;
+            mPC.addOne();
+
+            BitString second = new BitString();
+            second.setBits(theBits.substring(8, 16).toCharArray());
+            mMemory[mPC.getValue()] = second;
+            mPC.addOne();
+
+            BitString third = new BitString();
+            third.setBits(theBits.substring(16, 24).toCharArray());
+            mMemory[mPC.getValue()] = third;
+            mPC.addOne();
+
+        } else if (theBits.length() == 16) {
+            BitString first = new BitString();
+            first.setBits(theBits.substring(0, 8).toCharArray());
+            mMemory[mPC.getValue()] = first;
+            mPC.addOne();
+
+            BitString second = new BitString();
+            second.setBits(theBits.substring(8, 16).toCharArray());
+            mMemory[mPC.getValue()] = second;
+            mPC.addOne();
+
+        } else if (theBits.length() == 8) {
+            BitString bits = new BitString();
+            bits.setBits(theBits.toCharArray());
+            mMemory[mPC.getValue()] = bits;
+            mPC.addOne();
+        }
+
     }
-    
-	/**
-	 * Loads a 24 bit word into memory at the given address. 
-	 * @param address memory address
-	 * @param word data or instruction or address to be loaded into memory
-	 */
-	public void loadWord(String theBits, int theAddress) {
-		if (theBits.length() == 24) {          
-			BitString first = new BitString();
-			first.setBits(theBits.substring(0, 8).toCharArray());
-			mMemory[theAddress] = first;
-			
-			BitString second = new BitString();
-			second.setBits(theBits.substring(8, 16).toCharArray());
-			mMemory[theAddress + 1] = second;
-			
-			BitString third = new BitString();
-			third.setBits(theBits.substring(16, 24).toCharArray());
-			mMemory[theAddress + 2] = third;
-			
-		} else if (theBits.length() == 16) {          
-			BitString first = new BitString();
-			first.setBits(theBits.substring(0, 8).toCharArray());
-			mMemory[theAddress] = first;
-			
-			BitString second = new BitString();
-			second.setBits(theBits.substring(8, 16).toCharArray());
-			mMemory[theAddress + 1] = second;
-			
-		} else if (theBits.length() == 8) {
-			BitString first = new BitString();
-			first.setBits(theBits.substring(0, 8).toCharArray());
-			mMemory[theAddress] = first;
-		}
-	}
-	
+
+    /**
+     * Loads a 24 bit word into memory at the given address.
+     * @param theBits a string of bits
+     * @param theAddress data or instruction or address to be loaded into memory
+     */
+    public void loadWord(String theBits, int theAddress) {
+        if (theBits.length() == 24) {
+            BitString first = new BitString();
+            first.setBits(theBits.substring(0, 8).toCharArray());
+            mMemory[theAddress] = first;
+
+            BitString second = new BitString();
+            second.setBits(theBits.substring(8, 16).toCharArray());
+            mMemory[theAddress + 1] = second;
+
+            BitString third = new BitString();
+            third.setBits(theBits.substring(16, 24).toCharArray());
+            mMemory[theAddress + 2] = third;
+
+        } else if (theBits.length() == 16) {
+            BitString first = new BitString();
+            first.setBits(theBits.substring(0, 8).toCharArray());
+            mMemory[theAddress] = first;
+
+            BitString second = new BitString();
+            second.setBits(theBits.substring(8, 16).toCharArray());
+            mMemory[theAddress + 1] = second;
+
+        } else if (theBits.length() == 8) {
+            BitString first = new BitString();
+            first.setBits(theBits.substring(0, 8).toCharArray());
+            mMemory[theAddress] = first;
+        }
+    }
+
     /**
      * Returns the BitString at address of theMemory
      * @param theMemory the memory address
@@ -137,11 +138,11 @@ public class Computer {
     public BitString getMemory(int theMemory) {
         return mMemory[theMemory];
     }
-    
+
     public String getOutput() {
-    	return output.toString();
+        return output.toString();
     }
-    
+
     /**
      * Selects the next two BitStrings stored in memory and concatenates them
      * in order to create a 16 bit BitString.
@@ -164,7 +165,7 @@ public class Computer {
         opBS.setBits(wordArray);
         return opBS;
     }
-    
+
     /**
      * Selects the two concurrent BitStrings stored in memory at the specified address and concatenates them in order
      * to create a 16 bit BitString
@@ -196,29 +197,28 @@ public class Computer {
      * (specifier: 0101 0000)
      */
     public void executeChOutI() {
-    	BitString operand = concatenateWords();
-    	output.append((char)operand.getValue());
+        BitString operand = concatenateWords();
+        output.append((char)operand.getValue());
     }
-    
+
     /**
      * Performs Character output from the operand, direct instruction.
      * (specifier: 0101 0001)
      */
     public void executeChOutD() {
-    	BitString operand = concatenateWords();
-    	int address = operand.getValue();
-    	BitString memBits = concatenateWords(address);
+        BitString operand = concatenateWords();
+        int address = operand.getValue();
+        BitString memBits = concatenateWords(address);
         output.append((char)memBits.getValue());
     }
-    
+
     /**
      * Performs add the operand to the A register, immediate instruction.
      * (specifier: 0111 0000)
      */
     public void executeAddI() {
-    	BitString operand = concatenateWords();
-    	int sum = mA.getValue2sComp() + operand.getValue2sComp();
-    	mA.setValue2sComp(sum);
+        BitString operand = concatenateWords();
+        mA = bitCalc.add(mA, operand).copy();
     }
 
     /**
@@ -226,123 +226,115 @@ public class Computer {
      * (specifier: 0111 0001)
      */
     public void executeAddD() {
-    	BitString operand = concatenateWords();
-    	int address = operand.getValue2sComp();
-    	BitString memBits = concatenateWords(address);
-    	int sum = mA.getValue2sComp() + memBits.getValue2sComp();
-    	mA.setValue2sComp(sum);
-    	
+        BitString operand = concatenateWords();
+        int address = operand.getValue2sComp();
+        BitString memBits = concatenateWords(address);
+        mA = bitCalc.add(mA, memBits).copy();
     }
-    
+
     /**
      * Performs subtract the operand from the A register, immediate instruction.
      * (specifier: 1000 0000)
      */
     public void executeSubtractI() {
-    	BitString operand = concatenateWords();    	
-    	int diff = mA.getValue2sComp() - operand.getValue2sComp();
-    	mA.setValue2sComp(diff);
+        BitString operand = concatenateWords();
+        mA = bitCalc.subtract(mA, operand).copy();
     }
-    
+
     /**
      * Performs subtract the operand from the A register, direct instruction.
      * (specifier: 1000 0001)
      */
     public void executeSubtractD() {
-    	BitString operand = concatenateWords();
-    	int address = operand.getValue2sComp();
-    	BitString memBits = concatenateWords(address);
-    	int diff = mA.getValue2sComp() - memBits.getValue2sComp();
-    	mA.setValue2sComp(diff);
+        BitString operand = concatenateWords();
+        int address = operand.getValue2sComp();
+        BitString memBits = concatenateWords(address);
+        mA = bitCalc.subtract(mA, memBits).copy();
     }
-    
+
 
     /**
      * Performs bitwise AND from the A register, immediate instruction.
-     * (specifier: 1001 0000)	
+     * (specifier: 1001 0000)
      */
     public void executeAndI() {
-    	BitString operand = concatenateWords();
-    	int and = mA.getValue2sComp() & operand.getValue2sComp();
-    	mA.setValue2sComp(and);
+        BitString operand = concatenateWords();
+        mA = bitCalc.and(mA, operand).copy();
     }
-    
+
     /**
      * Performs bitwise AND from the A register, direct instruction.
-     * (specifier: 10010001)	
+     * (specifier: 1001 0001)
      */
     public void executeAndD() {
-    	BitString operand = concatenateWords();
-    	int address = operand.getValue2sComp();
-    	BitString memBits = concatenateWords(address);
-    	int and = mA.getValue2sComp() & memBits.getValue2sComp();
-    	mA.setValue2sComp(and);
+        BitString operand = concatenateWords();
+        int address = operand.getValue2sComp();
+        BitString memBits = concatenateWords(address);
+        mA = bitCalc.and(mA, memBits).copy();
     }
-    
+
     /**
      * Performs bitwise OR from the A register, immediate instruction.
-     * (specifier: 1010 0000)	
+     * (specifier: 1010 0000)
      */
     public void executeOrI() {
-    	BitString operand = concatenateWords();
-    	int or = operand.getValue2sComp() | mA.getValue2sComp();
-    	mA.setValue2sComp(or);
+        BitString operand = concatenateWords();
+        mA = bitCalc.or(mA, operand).copy();
     }
-    
+
     /**
      * Performs bitwise OR from the A register, direct instruction.
-     * (specifier: 10100001)	
+     * (specifier: 1010 0001)
      */
     public void executeOrD() {
-    	BitString operand = concatenateWords();
-    	int address = operand.getValue2sComp();
-    	BitString memBits = concatenateWords(address);
-    	int or = memBits.getValue2sComp() | mA.getValue2sComp();
-    	mA.setValue2sComp(or);
+        BitString operand = concatenateWords();
+        int address = operand.getValue2sComp();
+        BitString memBits = concatenateWords(address);
+        mA = bitCalc.or(mA, memBits).copy();
     }
-    
+
     /**
-     * Sets NZVC status bits based off of the difference of the 
+     * Sets NZVC status bits based off of the difference of the
      * A register and operand, immediate instruction.
      * (specifier: 10110000)
      */
     public void executeCPr() {
-    	int diff = 0;
-    	BitString operand = concatenateWords();
-    	diff = mA.getValue2sComp() - operand.getValue2sComp();
-    	// TODO: set status bits based off of the difference
+        int diff = 0;
+        BitString operand = concatenateWords();
+        diff = mA.getValue2sComp() - operand.getValue2sComp();
+        // TODO: set status bits based off of the difference
     }
 
     /**
-     * Performs a branch operation if C status bit is true, 
+     * Performs a branch operation if C status bit is true,
      * immediate instruction.
      * (specifier: 0001 0100)
      */
     public void executeBRC() {
-    	BitString operand = concatenateWords();
-    	//if(Calculator.getCFlag()) {
-    		//mPC = operand.copy();
-    	//}
+        BitString operand = concatenateWords();
+        if(bitCalc.getCFlag())
+            mPC = operand.copy();
     }
-    
+
     /**
      * Performs load the operand into the A register, immediate instruction.
      * (specifier: 1100 0000)
      */
     public void executeLdI() {
-    	BitString operand = concatenateWords();
-    	mA = operand.copy();
+        BitString operand = concatenateWords();
+        bitCalc.updateFlags(mA);
+        mA = operand.copy();
     }
-    
+
     /**
      * Performs load the operand into the A register, direct instruction.
      * (specifier: 1100 0001)
      */
     public void executeLdD() {
-    	BitString operand = concatenateWords();
-    	int address = operand.getValue();
-    	BitString memBits = concatenateWords(address);
-    	mA = memBits.copy();
+        BitString operand = concatenateWords();
+        int address = operand.getValue();
+        BitString memBits = concatenateWords(address);
+        mA = memBits.copy();
     }
 
     /**
@@ -350,23 +342,23 @@ public class Computer {
      * (specifier: 1110 0001)
      */
     public void executeSt() {
-    	BitString bitsA = mA.copy();
-    	String stringA = String.copyValueOf(bitsA.getBits());
-    	BitString operand = concatenateWords();
-    	int opAddress = operand.getValue();
-    	loadWord(stringA, opAddress);		
+        BitString bitsA = mA.copy();
+        String stringA = String.copyValueOf(bitsA.getBits());
+        BitString operand = concatenateWords();
+        int opAddress = operand.getValue();
+        loadWord(stringA, opAddress);
     }
-    
+
     public void executeBR() {
-    	BitString operand = concatenateWords();
-    	mPC.setValue(operand.getValue());
+        BitString operand = concatenateWords();
+        mPC.setValue(operand.getValue());
     }
 
     /**
      * Executes the various opCodes loaded into memory
      */
     public void execute() {
-    	int counter = 0;
+        int counter = 0;
         BitString specifierStr;
         int specifier;
         mPC.setValue(0);
@@ -382,9 +374,9 @@ public class Computer {
             specifier = specifierStr.getValue();
 
             switch (specifier) {
-            	case 4:					//(specifier: 0000 0100)
-            		executeBR();		//Branch unconditional
-            	break;
+                case 4:					//(specifier: 0000 0100)
+                    executeBR();		//Branch unconditional
+                    break;
                 case 80: 				//(specifier: 0101 0000)
                     executeChOutI();	//Char Output Immediate
                     break;
@@ -400,8 +392,20 @@ public class Computer {
                 case 128: 				//(specifier: 1000 0000)
                     executeSubtractI();	//Subtract Immediate
                     break;
-                case 129: 				//(specifier: 1000 0001) 
+                case 129: 				//(specifier: 1000 0001)
                     executeSubtractD();	//Subtract Direct
+                    break;
+                case 144:               //(specifier: 1001 0000)
+                    executeAndI();      //And Immediate
+                    break;
+                case 145:               //(specifier: 1001 0001)
+                    executeAndD();      //And Direct
+                    break;
+                case 160:               //(specifier: 1010 0000)
+                    executeOrI();      //Or Immediate
+                    break;
+                case 161:               //(specifier: 1010 0001)
+                    executeOrD();      //Or Direct
                     break;
                 case 192: 				//(specifier: 1100 0000)
                     executeLdI();		//Load Immediate
@@ -413,12 +417,12 @@ public class Computer {
                     executeSt();		//Store
                     break;
                 case 0: 				//(specifier: 0000 0000)
-                	System.out.println("Memory:");
-                	for (BitString b: mMemory) {
-                		System.out.print("(" + counter +")" + "\t");
-                		System.out.println(b.getBits());
-                		counter++;
-                	}
+                    System.out.println("Memory:");
+                    for (BitString b: mMemory) {
+                        System.out.print("(" + counter +")" + "\t");
+                        System.out.println(b.getBits());
+                        counter++;
+                    }
                     return;				//Stop
             }
         }

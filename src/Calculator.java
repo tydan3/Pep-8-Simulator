@@ -69,13 +69,13 @@ public class Calculator {
         int max = mod - 1;
         int min = mod * - 1;
 
+        if (newValue > max || newValue < min)
+            newValue = Math.floorMod((newValue + mod), (2 * mod)) - mod;
+
         this.nFlag = newValue < 0;
         this.zFlag = newValue == 0;
         this.vFlag = value < (mod >> 1);
         this.cFlag = value < 0;
-
-        if (newValue > max || newValue < min)
-            newValue = Math.floorMod((newValue + mod), (2 * mod)) - mod;
 
         newBitString.setValue2sComp(newValue);
         return newBitString;
@@ -240,9 +240,10 @@ public class Calculator {
      * Updates the N and Z flags from the given value. This method is designed for LD and
      * DECI instructions. While calculations are not performed on them, they do set flags.
      * Sets the N and Z flags.
-     * @param bitStringValue the Two's Complement value of a BitString
+     * @param bitString the given bitString
      */
-    public void updateFlags(int bitStringValue) {
+    public void updateFlags(BitString bitString) {
+        int bitStringValue = bitString.getValue2sComp();
         this.nFlag = bitStringValue < 0;
         this.zFlag = bitStringValue == 0;
     }

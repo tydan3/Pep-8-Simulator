@@ -16,7 +16,7 @@ class ComputerTest {
 	private BitString testBitString;
 	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
@@ -37,6 +37,7 @@ class ComputerTest {
 	@Test
 	void executeChOutDTest() {
 		System.out.println();
+		System.out.println("BLAHBLAHBLAHBLAH");
 		System.out.print("executeChOutDTest ");
 		
 		testComputer.loadWord("0101 0001 0000 0000 0000 0100"); //Output direct: ascii char K (#50) <- address 5
@@ -98,7 +99,7 @@ class ComputerTest {
 		BitString theData = new BitString();
 		theData.setValue2sComp(153); // Binary value 10011001 to A register
 		testComputer.setRegister(theData);
-		testComputer.loadWord("1001 0000 0101 0101 0101 0101"); // Or immediate: #21845 | accumulator
+		testComputer.loadWord("1001 0000 0101 0101 0101 0101"); // And immediate: #21845 | accumulator
 		testComputer.execute();
 		System.out.println(testComputer.getRegister().getValue2sComp());
 		assertEquals(17, testComputer.getRegister().getValue2sComp());
@@ -111,7 +112,7 @@ class ComputerTest {
 		BitString theData = new BitString();
 		theData.setValue2sComp(153); // Binary value 10011001 to A register
 		testComputer.setRegister(theData);
-		testComputer.loadWord("1001 0001 0000 0000 0000 0100"); // Or direct: address 4 (#21845) | accumulator
+		testComputer.loadWord("1001 0001 0000 0000 0000 0100"); // And direct: address 4 (#21845) | accumulator
 		testComputer.loadWord("0000 0000"); // Stop
 		testComputer.loadWord("0101 0101 0101 0101");
 		testComputer.execute();

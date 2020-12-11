@@ -190,17 +190,20 @@ class CalculatorTest {
     @org.junit.jupiter.api.Test
     void updateFlags() {
         //Positive
-        testCalc.updateFlags(80);
+        bitString1.setValue2sComp(80);
+        testCalc.updateFlags(bitString1);
         assertFalse(testCalc.getNFlag());
         assertFalse(testCalc.getZFlag());
 
         //Zero
-        testCalc.updateFlags(0);
+        bitString1.setValue2sComp(0);
+        testCalc.updateFlags(bitString1);
         assertFalse(testCalc.getNFlag());
         assertTrue(testCalc.getZFlag());
 
         //Negative
-        testCalc.updateFlags(-80);
+        bitString1.setValue2sComp(-80);
+        testCalc.updateFlags(bitString1);
         assertTrue(testCalc.getNFlag());
         assertFalse(testCalc.getZFlag());
     }
@@ -208,30 +211,36 @@ class CalculatorTest {
     @org.junit.jupiter.api.Test
     void getNFlag() {
         //Negative
-        testCalc.updateFlags(-8);
+        bitString1.setValue2sComp(-8);
+        testCalc.updateFlags(bitString1);
         assertTrue(testCalc.getNFlag());
 
         //Zero
-        testCalc.updateFlags(0);
+        bitString1.setValue2sComp(0);
+        testCalc.updateFlags(bitString1);
         assertFalse(testCalc.getNFlag());
 
         //Positive
-        testCalc.updateFlags(8);
+        bitString1.setValue2sComp(8);
+        testCalc.updateFlags(bitString1);
         assertFalse(testCalc.getNFlag());
     }
 
     @org.junit.jupiter.api.Test
     void getZFlag() {
         //Negative
-        testCalc.updateFlags(-6);
+        bitString1.setValue2sComp(-6);
+        testCalc.updateFlags(bitString1);
         assertFalse(testCalc.getZFlag());
 
         //Zero
-        testCalc.updateFlags(0);
+        bitString1.setValue2sComp(0);
+        testCalc.updateFlags(bitString1);
         assertTrue(testCalc.getZFlag());
 
         //Positive
-        testCalc.updateFlags(6);
+        bitString1.setValue2sComp(6);
+        testCalc.updateFlags(bitString1);
         assertFalse(testCalc.getZFlag());
     }
 
