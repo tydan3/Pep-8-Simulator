@@ -101,7 +101,6 @@ class ComputerTest {
 		testComputer.setRegister(theData);
 		testComputer.loadWord("1001 0000 0101 0101 0101 0101"); // And immediate: #21845 | accumulator
 		testComputer.execute();
-		System.out.println(testComputer.getRegister().getValue2sComp());
 		assertEquals(17, testComputer.getRegister().getValue2sComp());
 	}
 	
@@ -137,6 +136,17 @@ class ComputerTest {
 		testComputer.loadWord("0101 0101 0101 0101");
 		testComputer.execute();
 		assertEquals(21845, testComputer.getRegister().getValue2sComp());
+	}
+	
+	@Test
+	void executeBRCTest() {
+		System.out.println();
+		System.out.print("executeBRCTest ");
+		testComputer.getCalculator().setCFlag(true);
+		testComputer.loadWord("0001 0100 0000 0000 0001 0100"); // Branch to PC = 20
+		testComputer.execute();
+		System.out.println(testComputer.getPC().getValue2sComp());
+		assertEquals(20, testComputer.getPC().getValue2sComp());
 	}
 	
 	@Test

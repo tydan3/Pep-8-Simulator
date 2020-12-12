@@ -38,6 +38,20 @@ public class Computer {
         }
 
     }
+    
+    /**
+     * A getter for the Calculator. This is to be used only for 
+     * testing purposes.
+     * @return the Calculator
+     */
+    public Calculator getCalculator() {return bitCalc;}
+    
+    /**
+     * A getter for the value of the PC. This is to be used only for
+     * testing purposes.
+     * @return the PC
+     */
+    public BitString getPC() {return mPC.copy();}
 
     /**
      * Returns the BitString at the register specified by theRegister
@@ -191,6 +205,18 @@ public class Computer {
         opBS.setBits(wordArray);
         return opBS;
     }
+    
+    /**
+     * Performs a branch operation if C status bit is true,
+     * immediate instruction.
+     * (specifier: 0001 0100)
+     */
+    public void executeBRC() {
+        BitString operand = concatenateWords();
+        if(bitCalc.getCFlag())
+            mPC.setValue2sComp(operand.getValue() - 1); 
+        	// Subtract 1 since PC adds 1 automatically
+    }
 
     /**
      * Performs Character output from the operand, immediate instruction.
@@ -302,18 +328,10 @@ public class Computer {
         int diff = 0;
         BitString operand = concatenateWords();
         diff = mA.getValue2sComp() - operand.getValue2sComp();
-        // TODO: set status bits based off of the difference
-    }
-
-    /**
-     * Performs a branch operation if C status bit is true,
-     * immediate instruction.
-     * (specifier: 0001 0100)
-     */
-    public void executeBRC() {
-        BitString operand = concatenateWords();
-        if(bitCalc.getCFlag())
-            mPC = operand.copy();
+        bitCalc.setNFlag(diff < 0);
+        bitCalc.setZFlag(diff == 0);
+        bitCalc.setVFlag(diff < (-1 << 15) || diff >= (1 << 15));
+        bitCalc.setCFlag(diff >= (1 << 15));
     }
 
     /**
@@ -377,6 +395,9 @@ public class Computer {
                 case 4:					//(specifier: 0000 0100)
                     executeBR();		//Branch unconditional
                     break;
+                case 20:				//(specifier: 0001 0100)
+                	executeBRC();		//Branch if carry, Immediate
+                	break;
                 case 80: 				//(specifier: 0101 0000)
                     executeChOutI();	//Char Output Immediate
                     break;

@@ -271,4 +271,28 @@ public class Calculator {
      * @return the carry flag
      */
     public boolean getCFlag() {return this.cFlag;}
+    
+    /**
+     * Sets the boolean value representing negation.
+     * @param theBit the negative flag
+     */
+    public void setNFlag(boolean theBit) {this.nFlag = theBit;}
+    
+    /**
+     * Sets the boolean value representing zero.
+     * @param theBit the zero flag
+     */
+    public void setZFlag(boolean theBit) {this.zFlag = theBit;}
+    
+    /**
+     * Sets the boolean value representing overflow.
+     * @param theBit the overflow flag
+     */
+    public void setVFlag(boolean theBit) {this.vFlag = theBit;}
+    
+    /**
+     * Sets the boolean value representing carry over.
+     * @param theBit the carry flag
+     */
+    public void setCFlag(boolean theBit) {this.cFlag = theBit;}
 }

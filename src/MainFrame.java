@@ -34,7 +34,7 @@ public class MainFrame extends JFrame implements ActionListener {
         // "Input label"
         final JLabel assemblyCodeLabel = new JLabel("Input");
         assemblyCodeLabel.setBounds(20, 50, 100, 30);
-        assemblyCodeLabel.setText("Instruction (bin):");
+        assemblyCodeLabel.setText("Instruction: (text)");
         assemblyCodeLabel.setForeground(Color.BLUE);
         add(assemblyCodeLabel);
 
@@ -44,13 +44,18 @@ public class MainFrame extends JFrame implements ActionListener {
         outputLabel.setText("Output:");
         outputLabel.setForeground(Color.BLUE);
         add(outputLabel);
+        
+        // Input Text Area (TEXT)
+        final JTextArea inputTextArea = new JTextArea("");
+        inputTextArea.setBounds(15, 85, 200, 600);
+        add(inputTextArea);
 
-        // Input Text Area
+        // Input Text Area (BINARY)
         final JTextArea inputArea = new JTextArea("");
-        inputArea.setBounds(15, 85, 200, 600);
+        inputArea.setBounds(15, 690, 405, 20);
         add(inputArea);
 
-        // Input Text Area
+        // Output Text Area
         final JTextArea outputArea = new JTextArea("");
         outputArea.setBounds(220, 85, 200, 600);
         add(outputArea);
