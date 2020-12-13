@@ -1,3 +1,4 @@
+import com.sun.net.httpserver.Authenticator.Result;
 
 /**
  * Computer class comprises of memory and accumulator (register A) and
@@ -371,7 +372,82 @@ public class Computer {
         BitString operand = concatenateWords();
         mPC.setValue(operand.getValue());
     }
-
+    
+    ////////////////////////////////////
+    /**
+     * Execute NOTr instruction
+     * (specifier:0001 1000)
+     */
+    public void executeNOTr() {
+        BitString bitsA = mA.copy();
+        mA = bitCalc.not(bitsA);
+        int result = mA.getValue();
+        bitCalc.setNFlag(result < 0);
+        bitCalc.setZFlag(result == 0);
+    }
+    
+    /**
+     * Execute NEGr instruction
+     * (specifier:0001 1010)
+     */
+    public void executeNEGr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.not(bitsA);
+        int result = mA.getValue();
+        bitCalc.setNFlag(result < 0);
+        bitCalc.setZFlag(result == 0);
+        bitCalc.setVFlag(result < (-1 << 15) || result >= (1 << 15));
+    }
+    
+    /**
+     * Execute ASLr instruction
+     * (specifier:0001 1100)
+     */
+    public void executeASLr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.shiftLeft(bitsA);
+        int result = mA.getValue();
+        bitCalc.setNFlag(result < 0);
+        bitCalc.setZFlag(result == 0);
+        bitCalc.setVFlag(result < (-1 << 15) || result >= (1 << 15));
+        bitCalc.setCFlag(result >= (1 << 15));
+    }
+    
+    /**
+     * Execute ASRr instruction
+     * (specifier:0001 1110)
+     */
+    public void executeASRr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.shiftRight(bitsA);
+        int result = mA.getValue();
+        bitCalc.setNFlag(result < 0);
+        bitCalc.setZFlag(result == 0);
+        bitCalc.setCFlag(result >= (1 << 15));
+    }
+    
+    /**
+     * Execute ROLr instruction
+     * (specifier:0010 0000)
+     */
+    public void executeROLr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.rotateLeft(bitsA);
+        int result = mA.getValue();
+        bitCalc.setCFlag(result >= (1 << 15));
+    }
+    
+    /**
+     * Execute RORr instruction
+     * (specifier:0010 0010)
+     */
+    public void executeRORr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.rotateRight(bitsA);
+        int result = mA.getValue();
+        bitCalc.setCFlag(result >= (1 << 15));
+    }
+    
     /**
      * Executes the various opCodes loaded into memory
      */
@@ -397,6 +473,24 @@ public class Computer {
                     break;
                 case 20:				//(specifier: 0001 0100)
                 	executeBRC();		//Branch if carry, Immediate
+                	break;
+                case 24:				//(specifier: 0001 1000)
+                	executeNOTr();		//Bitwise invert r
+                	break;
+                case 26:				//(specifier:0001 1010)
+                	executeNEGr();      //Negate r
+                	break;
+                case 28:				//(specifier:0001 1100)
+                	executeASLr();      //Arithmetic shift left
+                	break;
+                case 30:				//(specifier:0001 1110)
+                	executeASRr();		//Arithmetic shift left
+                	break;		
+                case 32:				//(specifier:0010 0000)
+                	executeROLr();		//Rotate left r
+                	break;
+                case 34:				//(specifier:0010 0010)
+                	executeRORr();		//Rotate right r
                 	break;
                 case 80: 				//(specifier: 0101 0000)
                     executeChOutI();	//Char Output Immediate
