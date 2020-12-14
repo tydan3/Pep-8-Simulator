@@ -56,6 +56,8 @@ class ComputerTest {
 		testComputer.loadWord("0001 1000");
 		testComputer.execute();
 		assertEquals("1111000011110000", testComputer.getRegister().toString());
+		assertEquals(testComputer.getCalculator().getNFlag(), true);
+		assertEquals(testComputer.getCalculator().getZFlag(), false);
 	}
 	
 	@Test
@@ -67,6 +69,9 @@ class ComputerTest {
 		testComputer.loadWord("0001 1010");
 		testComputer.execute();
 		assertEquals("1111111111111000", testComputer.getRegister().toString());
+		assertEquals(testComputer.getCalculator().getNFlag(), true);
+		assertEquals(testComputer.getCalculator().getZFlag(), false);
+		assertEquals(testComputer.getCalculator().getVFlag(), false);
 	}
 	
 	@Test
@@ -78,6 +83,10 @@ class ComputerTest {
 		testComputer.loadWord("0001 1100");
 		testComputer.execute();
 		assertEquals("0000000000010000", testComputer.getRegister().toString());
+		assertEquals(testComputer.getCalculator().getNFlag(), false);
+		assertEquals(testComputer.getCalculator().getZFlag(), false);
+		assertEquals(testComputer.getCalculator().getVFlag(), true);
+		assertEquals(testComputer.getCalculator().getCFlag(), false);
 	}
 	
 	@Test
@@ -89,6 +98,9 @@ class ComputerTest {
 		testComputer.loadWord("0001 1110");
 		testComputer.execute();
 		assertEquals("0000000000000100", testComputer.getRegister().toString());
+		assertEquals(testComputer.getCalculator().getNFlag(), false);
+		assertEquals(testComputer.getCalculator().getZFlag(), false);
+		assertEquals(testComputer.getCalculator().getCFlag(), false);
 	}
 	
 	@Test
@@ -100,6 +112,7 @@ class ComputerTest {
 		testComputer.loadWord("0010 0000");
 		testComputer.execute();
 		assertEquals("0000000000010001", testComputer.getRegister().toString());
+		assertEquals(testComputer.getCalculator().getCFlag(), true);
 	}
 	
 	@Test
@@ -111,6 +124,7 @@ class ComputerTest {
 		testComputer.loadWord("0010 0010");
 		testComputer.execute();
 		assertEquals("1100000000000100", testComputer.getRegister().toString());
+		assertEquals(testComputer.getCalculator().getCFlag(), true);
 	}
 	
 	@Test

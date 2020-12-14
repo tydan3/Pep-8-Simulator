@@ -224,9 +224,6 @@ public class Computer {
     public void executeNOTr() {
         BitString bitsA = mA.copy();
         mA = bitCalc.not(bitsA);
-        int result = mA.getValue();
-        bitCalc.setNFlag(result < 0);
-        bitCalc.setZFlag(result == 0);
     }
     
     /**
@@ -236,10 +233,6 @@ public class Computer {
     public void executeNEGr() {
     	BitString bitsA = mA.copy();
         mA = bitCalc.negate(bitsA);
-        int result = mA.getValue();
-        bitCalc.setNFlag(result < 0);
-        bitCalc.setZFlag(result == 0);
-        bitCalc.setVFlag(result < (-1 << 15) || result >= (1 << 15));
     }
     
     /**
@@ -249,11 +242,6 @@ public class Computer {
     public void executeASLr() {
     	BitString bitsA = mA.copy();
         mA = bitCalc.shiftLeft(bitsA);
-        int result = mA.getValue();
-        bitCalc.setNFlag(result < 0);
-        bitCalc.setZFlag(result == 0);
-        bitCalc.setVFlag(result < (-1 << 15) || result >= (1 << 15));
-        bitCalc.setCFlag(result >= (1 << 15));
     }
     
     /**
@@ -263,10 +251,6 @@ public class Computer {
     public void executeASRr() {
     	BitString bitsA = mA.copy();
         mA = bitCalc.shiftRight(bitsA);
-        int result = mA.getValue();
-        bitCalc.setNFlag(result < 0);
-        bitCalc.setZFlag(result == 0);
-        bitCalc.setCFlag(result >= (1 << 15));
     }
     
     /**
@@ -276,8 +260,6 @@ public class Computer {
     public void executeROLr() {
     	BitString bitsA = mA.copy();
         mA = bitCalc.rotateLeft(bitsA);
-        int result = mA.getValue();
-        bitCalc.setCFlag(result >= (1 << 15));
     }
     
     /**
@@ -287,8 +269,6 @@ public class Computer {
     public void executeRORr() {
     	BitString bitsA = mA.copy();
         mA = bitCalc.rotateRight(bitsA);
-        int result = mA.getValue();
-        bitCalc.setCFlag(result >= (1 << 15));
     }
     
 
