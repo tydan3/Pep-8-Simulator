@@ -1,5 +1,3 @@
-import com.sun.net.httpserver.Authenticator.Result;
-
 /**
  * Computer class comprises of memory and accumulator (register A) and
  * can execute the instructions based on PC and IR.
@@ -218,6 +216,81 @@ public class Computer {
             mPC.setValue2sComp(operand.getValue() - 1); 
         	// Subtract 1 since PC adds 1 automatically
     }
+    
+    /**
+     * Execute NOTr instruction
+     * (specifier:0001 1000)
+     */
+    public void executeNOTr() {
+        BitString bitsA = mA.copy();
+        mA = bitCalc.not(bitsA);
+        int result = mA.getValue();
+        bitCalc.setNFlag(result < 0);
+        bitCalc.setZFlag(result == 0);
+    }
+    
+    /**
+     * Execute NEGr instruction
+     * (specifier:0001 1010)
+     */
+    public void executeNEGr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.negate(bitsA);
+        int result = mA.getValue();
+        bitCalc.setNFlag(result < 0);
+        bitCalc.setZFlag(result == 0);
+        bitCalc.setVFlag(result < (-1 << 15) || result >= (1 << 15));
+    }
+    
+    /**
+     * Execute ASLr instruction
+     * (specifier:0001 1100)
+     */
+    public void executeASLr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.shiftLeft(bitsA);
+        int result = mA.getValue();
+        bitCalc.setNFlag(result < 0);
+        bitCalc.setZFlag(result == 0);
+        bitCalc.setVFlag(result < (-1 << 15) || result >= (1 << 15));
+        bitCalc.setCFlag(result >= (1 << 15));
+    }
+    
+    /**
+     * Execute ASRr instruction
+     * (specifier:0001 1110)
+     */
+    public void executeASRr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.shiftRight(bitsA);
+        int result = mA.getValue();
+        bitCalc.setNFlag(result < 0);
+        bitCalc.setZFlag(result == 0);
+        bitCalc.setCFlag(result >= (1 << 15));
+    }
+    
+    /**
+     * Execute ROLr instruction
+     * (specifier:0010 0000)
+     */
+    public void executeROLr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.rotateLeft(bitsA);
+        int result = mA.getValue();
+        bitCalc.setCFlag(result >= (1 << 15));
+    }
+    
+    /**
+     * Execute RORr instruction
+     * (specifier:0010 0010)
+     */
+    public void executeRORr() {
+    	BitString bitsA = mA.copy();
+        mA = bitCalc.rotateRight(bitsA);
+        int result = mA.getValue();
+        bitCalc.setCFlag(result >= (1 << 15));
+    }
+    
 
     /**
      * Performs Character output from the operand, immediate instruction.
@@ -371,81 +444,6 @@ public class Computer {
     public void executeBR() {
         BitString operand = concatenateWords();
         mPC.setValue(operand.getValue());
-    }
-    
-    ////////////////////////////////////
-    /**
-     * Execute NOTr instruction
-     * (specifier:0001 1000)
-     */
-    public void executeNOTr() {
-        BitString bitsA = mA.copy();
-        mA = bitCalc.not(bitsA);
-        int result = mA.getValue();
-        bitCalc.setNFlag(result < 0);
-        bitCalc.setZFlag(result == 0);
-    }
-    
-    /**
-     * Execute NEGr instruction
-     * (specifier:0001 1010)
-     */
-    public void executeNEGr() {
-    	BitString bitsA = mA.copy();
-        mA = bitCalc.not(bitsA);
-        int result = mA.getValue();
-        bitCalc.setNFlag(result < 0);
-        bitCalc.setZFlag(result == 0);
-        bitCalc.setVFlag(result < (-1 << 15) || result >= (1 << 15));
-    }
-    
-    /**
-     * Execute ASLr instruction
-     * (specifier:0001 1100)
-     */
-    public void executeASLr() {
-    	BitString bitsA = mA.copy();
-        mA = bitCalc.shiftLeft(bitsA);
-        int result = mA.getValue();
-        bitCalc.setNFlag(result < 0);
-        bitCalc.setZFlag(result == 0);
-        bitCalc.setVFlag(result < (-1 << 15) || result >= (1 << 15));
-        bitCalc.setCFlag(result >= (1 << 15));
-    }
-    
-    /**
-     * Execute ASRr instruction
-     * (specifier:0001 1110)
-     */
-    public void executeASRr() {
-    	BitString bitsA = mA.copy();
-        mA = bitCalc.shiftRight(bitsA);
-        int result = mA.getValue();
-        bitCalc.setNFlag(result < 0);
-        bitCalc.setZFlag(result == 0);
-        bitCalc.setCFlag(result >= (1 << 15));
-    }
-    
-    /**
-     * Execute ROLr instruction
-     * (specifier:0010 0000)
-     */
-    public void executeROLr() {
-    	BitString bitsA = mA.copy();
-        mA = bitCalc.rotateLeft(bitsA);
-        int result = mA.getValue();
-        bitCalc.setCFlag(result >= (1 << 15));
-    }
-    
-    /**
-     * Execute RORr instruction
-     * (specifier:0010 0010)
-     */
-    public void executeRORr() {
-    	BitString bitsA = mA.copy();
-        mA = bitCalc.rotateRight(bitsA);
-        int result = mA.getValue();
-        bitCalc.setCFlag(result >= (1 << 15));
     }
     
     /**

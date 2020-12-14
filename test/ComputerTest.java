@@ -48,6 +48,72 @@ class ComputerTest {
 	}
 	
 	@Test
+	void executeNOTrTest() {
+		System.out.println();
+		System.out.print("executeNOTrTest ");
+		
+		testComputer.loadWord("1100 0000 0000 1111 0000 1111"); // Load immediate: 1100 0000 0000 1111 0000 1111 -> accumulator
+		testComputer.loadWord("0001 1000");
+		testComputer.execute();
+		assertEquals("1111000011110000", testComputer.getRegister().toString());
+	}
+	
+	@Test
+	void executeNEGrTest() {
+		System.out.println();
+		System.out.print("executeNEGrTest ");
+		
+		testComputer.loadWord("1100 0000 0000 0000 0000 1000"); // Load immediate: 1100 0000 0000 0000 0000 1000 = 8 -> accumulator
+		testComputer.loadWord("0001 1010");
+		testComputer.execute();
+		assertEquals("1111111111111000", testComputer.getRegister().toString());
+	}
+	
+	@Test
+	void executeASLrTest() {
+		System.out.println();
+		System.out.print("executeASLrTest ");
+		
+		testComputer.loadWord("1100 0000 0000 0000 0000 1000"); // Load immediate: 1100 0000 0000 0000 0000 1111 -> accumulator
+		testComputer.loadWord("0001 1100");
+		testComputer.execute();
+		assertEquals("0000000000010000", testComputer.getRegister().toString());
+	}
+	
+	@Test
+	void executeASRrTest() {
+		System.out.println();
+		System.out.print("executeASRrTest ");
+		
+		testComputer.loadWord("1100 0000 0000 0000 0000 1000"); // Load immediate: 1100 0000 0000 0000 0000 1111 -> accumulator
+		testComputer.loadWord("0001 1110");
+		testComputer.execute();
+		assertEquals("0000000000000100", testComputer.getRegister().toString());
+	}
+	
+	@Test
+	void executeROLrTest() {
+		System.out.println();
+		System.out.print("executeROLrTest ");
+		
+		testComputer.loadWord("1100 0000 1000 0000 0000 1000"); // Load immediate: 1100 0000 1000 0000 0000 1000 -> accumulator
+		testComputer.loadWord("0010 0000");
+		testComputer.execute();
+		assertEquals("0000000000010001", testComputer.getRegister().toString());
+	}
+	
+	@Test
+	void executeRORrTest() {
+		System.out.println();
+		System.out.print("executeRORrTest ");
+		
+		testComputer.loadWord("1100 0000 1000 0000 0000 1001"); // Load immediate: 1100 0000 1000 0000 0000 1001 -> accumulator
+		testComputer.loadWord("0010 0010");
+		testComputer.execute();
+		assertEquals("1100000000000100", testComputer.getRegister().toString());
+	}
+	
+	@Test
 	void executeAddITest() {
 		System.out.println();
 		System.out.print("executeAddITest ");
