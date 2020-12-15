@@ -216,6 +216,18 @@ public class Computer {
             mPC.setValue2sComp(operand.getValue() - 1); 
         	// Subtract 1 since PC adds 1 automatically
     }
+
+    /**
+     * Performs a branch operation if V status bit is true,
+     * immediate instruction.
+     * (specifier: 0001 0010)
+     */
+    public void executeBRV() {
+        BitString operand = concatenateWords();
+        if(bitCalc.getVFlag())
+            mPC.setValue2sComp(operand.getValue() - 1);
+        // Subtract 1 since PC adds 1 automatically
+    }
     
     /**
      * Execute NOTr instruction
@@ -425,6 +437,66 @@ public class Computer {
         BitString operand = concatenateWords();
         mPC.setValue(operand.getValue());
     }
+
+    /**
+     * Execute branch if less than or equal to instruction
+     * (specifier:0000 0110)
+     */
+    public void executeBRLE() {
+        BitString operand = concatenateWords();
+        if (bitCalc.getNFlag() || bitCalc.getZFlag())
+            mPC.setValue(operand.getValue());
+    }
+
+    /**
+     * Execute branch if less than instruction
+     * (specifier:0000 1000)
+     */
+    public void executeBRLT() {
+        BitString operand = concatenateWords();
+        if (bitCalc.getNFlag())
+            mPC.setValue(operand.getValue());
+    }
+
+    /**
+     * Execute branch if equal to instruction
+     * (specifier:0000 1010)
+     */
+    public void executeBREQ() {
+        BitString operand = concatenateWords();
+        if (bitCalc.getZFlag())
+            mPC.setValue(operand.getValue());
+    }
+
+    /**
+     * Execute branch if not equal to instruction
+     * (specifier:0000 1100)
+     */
+    public void executeBRNE() {
+        BitString operand = concatenateWords();
+        if (!bitCalc.getZFlag())
+            mPC.setValue(operand.getValue());
+    }
+
+    /**
+     * Execute branch if greater than or equal to instruction
+     * (specifier:0000 1110)
+     */
+    public void executeBRGE() {
+        BitString operand = concatenateWords();
+        if (!bitCalc.getNFlag() || bitCalc.getZFlag())
+            mPC.setValue(operand.getValue());
+    }
+
+    /**
+     * Execute branch if greater than instruction
+     * (specifier:0001 0000)
+     */
+    public void executeBRGT() {
+        BitString operand = concatenateWords();
+        if (!bitCalc.getNFlag())
+            mPC.setValue(operand.getValue());
+    }
     
     /**
      * Executes the various opCodes loaded into memory
@@ -448,6 +520,27 @@ public class Computer {
             switch (specifier) {
                 case 4:					//(specifier: 0000 0100)
                     executeBR();		//Branch unconditional
+                    break;
+                case 6:                 //(specifier: 0000 0110)
+                    executeBRLE();      //Branch if less than or equal to
+                    break;
+                case 8:                 //(specifier: 0000 1000)
+                    executeBRLT();      //Branch if less than
+                    break;
+                case 10:                //(specifier: 0000 1010)
+                    executeBREQ();      //Branch if equal to
+                    break;
+                case 12:                //(specifier: 0000 1100)
+                    executeBRNE();      //Branch if not equal to
+                    break;
+                case 14:                //(specifier: 0000 1110)
+                    executeBRGE();      //Branch if greater than or equal to
+                    break;
+                case 16:                //(specifier: 0001 0000)
+                    executeBRGT();      //Branch if greater than
+                    break;
+                case 18:                //(specifier: 0001 0010)
+                    executeBRV();       //Branch if overflow
                     break;
                 case 20:				//(specifier: 0001 0100)
                 	executeBRC();		//Branch if carry, Immediate
@@ -495,10 +588,13 @@ public class Computer {
                     executeAndD();      //And Direct
                     break;
                 case 160:               //(specifier: 1010 0000)
-                    executeOrI();      //Or Immediate
+                    executeOrI();       //Or Immediate
                     break;
                 case 161:               //(specifier: 1010 0001)
-                    executeOrD();      //Or Direct
+                    executeOrD();       //Or Direct
+                    break;
+                case 176:               //(specifier: 1011 0000)
+                    executeCPr();       //Compare Immediate
                     break;
                 case 192: 				//(specifier: 1100 0000)
                     executeLdI();		//Load Immediate

@@ -1,7 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests to validate the proper functionality of the Calculator method
+ * Tests to validate the proper functionality of the Calculator method.
  * @author Robert Max Davis
  */
 class CalculatorTest {

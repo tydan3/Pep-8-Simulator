@@ -2,13 +2,13 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 /**
- * Converts assembly code from the the given input into hexadecimal code.
+ * Converts assembly code from the the given input into binary code.
  * @author Robert Max Davis
  */
 public class AssemblyConverter {
     private static HashMap<String, Integer> offsetMap;
     private static ArrayList<ArrayList<String>> arrList;
-    private static ArrayList<String> hexList;
+    private static ArrayList<String> binList;
 
     /**
      * Initializes the private variables
@@ -16,14 +16,14 @@ public class AssemblyConverter {
     public AssemblyConverter() {
         offsetMap = new HashMap<>();
         arrList = new ArrayList<>();
-        hexList = new ArrayList<>();
+        binList = new ArrayList<>();
     }
 
     /**
-     * Performs the conversion operation on the assemblyCode parameter to hexadecimal code.
+     * Performs the conversion operation on the assemblyCode parameter to binary code.
      *
      * @param assemblyCode A string of assembly code
-     * @return A string of hexadecimal code
+     * @return A string of binary code
      */
     public String generateHexString(String assemblyCode) {
         if (assemblyCode.isBlank()) {
@@ -47,7 +47,7 @@ public class AssemblyConverter {
             }
         }
 
-        //Generates the hex code for each instruction which are added to the hexList
+        //Generates the binary code for each instruction which are added to the hexList
         for (ArrayList<String> strings : arrList) {
             String tag = null;
 
@@ -64,28 +64,22 @@ public class AssemblyConverter {
             } else {
                 addOpcode(currentArr.get(0), currentArr.get(1), currentArr.get(2), tag);
             }
-
-            hexList.add(" ");
         }
 
         //Tabulates the offset tags and records them in a map
-        int spaces = 0;
-        for (int i = 0; i < hexList.size(); i++) {
-            if (hexList.get(i).equals(" ")) {
-                spaces++;
-            }
-            else if (hexList.get(i).contains(":")) {
-                String[] hexArr = hexList.get(i).split(":");
-                offsetMap.put(hexArr[0], i - spaces);
-                hexList.set(i, hexArr[1]);
+        for (int i = 0; i < binList.size(); i++) {
+            if (binList.get(i).contains(":")) {
+                String[] hexArr = binList.get(i).split(":");
+                offsetMap.put(hexArr[0], i);
+                binList.set(i, hexArr[1]);
             }
         }
 
-        return listToHexString();
+        return listToBinString();
     }
 
     /**
-     * Calculates the hexadecimal code for operations that do not need input from
+     * Calculates the binary code for operations that do not need input from
      * immediate or direct.
      *
      * @param opcode The instruction intended to be performed
@@ -93,45 +87,30 @@ public class AssemblyConverter {
      */
     private void addOpCode(String opcode, String tag) {
         boolean exists = true;
-        String hex = "";
+        String instr = "";
         
         if (tag != null) {
-            hex = tag;
+            instr = tag;
         }
 
         switch (opcode) {
-            case "STOP":
-                hex += "00";
-                break;
-            case "NOTR":
-                hex += "18";
-                break;
-            case "NEGR":
-                hex += "1A";
-                break;
-            case "ASLR":
-                hex += "1C";
-                break;
-            case "ASRR":
-                hex += "1E";
-                break;
-            case "ROLR":
-                hex += "20";
-                break;
-            case "RORR":
-                hex += "22";
-                break;
-            default:
-                exists = false;
+            case "STOP" -> instr += "00000000";
+            case "NOTR" -> instr += "00011000";
+            case "NEGR" -> instr += "00011010";
+            case "ASLR" -> instr += "00011100";
+            case "ASRR" -> instr += "00011110";
+            case "ROLR" -> instr += "00100000";
+            case "RORR" -> instr += "00100010";
+            default -> exists = false;
         }
 
         if (exists) {
-            hexList.add(hex);
+            binList.add(instr);
         }
     }
 
     /**
-     * Calculates the hexadecimal code for branch operations.
+     * Calculates the binary code for branch operations.
      *
      * @param opcode The instruction intended to be performed
      * @param offset The tag to which the branch instruction should offset
@@ -139,52 +118,32 @@ public class AssemblyConverter {
      */
     private void addOpCode(String opcode, String offset, String tag) {
         boolean exists = true;
-        String brHexCode = "";
+        String instr = "";
 
         if (tag != null) {
-            brHexCode = tag;
+            instr = tag;
         }
 
         switch (opcode) {
-            case "BR":
-            case "BRC":
-                brHexCode += "04";
-                break;
-            case "BRLE":
-                brHexCode += "06";
-                break;
-            case "BRLT":
-                brHexCode += "08";
-                break;
-            case "BREQ":
-                brHexCode += "0A";
-                break;
-            case "BRNE":
-                brHexCode += "0C";
-                break;
-            case "BRGE":
-                brHexCode += "0E";
-                break;
-            case "BRN":
-            case "BRZ":
-                break;
-            case "BRV":
-                brHexCode += "02";
-                break;
-            default:
-                exists = false;
+            case "BR" -> instr += "00000100";
+            case "BRLE" -> instr += "00000110";
+            case "BRLT" -> instr += "00001000";
+            case "BREQ" -> instr += "00001010";
+            case "BRNE" -> instr += "00001100";
+            case "BRGE" -> instr += "00001110";
+            case "BRV" -> instr += "00010010";
+            case "BRC" -> instr += "00010100";
+            default -> exists = false;
         }
 
         if (exists) {
-            String hexBuild = brHexCode + "!" + offset;
-            hexList.add(hexBuild);
+            binList.add(instr + "!" + offset);
+            IntStream.range(0, 2).forEachOrdered(i -> binList.add("0"));
         }
-
-        IntStream.range(0, 2).forEachOrdered(i -> hexList.add("00"));
     }
 
     /**
-     * Calculates the hexadecimal code for operations that require an
+     * Calculates the binary code for operations that require an
      * immediate or direct addressing mode.
      *
      * @param opcode The instruction intended to be performed
@@ -194,105 +153,92 @@ public class AssemblyConverter {
      */
     private void addOpcode(String opcode, String value, String mode, String tag) {
         boolean exists = true;
-        int addMode;
-        String hexTag = "";
+        String instr = "";
 
         if (tag != null) {
-            hexTag = tag;
-        }
-
-        if (mode.equals("I")) {
-            addMode = 0;
-        } else if (mode.equals("D")) {
-            addMode = 1;
-        } else {
-            addMode = 3;
+            instr = tag;
         }
 
         switch (opcode) {
-            case "LDR":
-                addMode += 192;
-                break;
-            case "STR":
-                addMode += 224;
-                break;
-            case "ADDR":
-                addMode += 112;
-                break;
-            case "SUBR":
-                addMode += 128;
-                break;
-            case "ANDR":
-                addMode += 144;
-                break;
-            case "ORR":
-                addMode += 160;
-                break;
-            case "CHARO":
-                addMode += 80;
-                break;
-            case "CHARI":
-                addMode += 72;
-                break;
-            default:
-                exists = false;
+            case "CHARI" -> instr += "010010";
+            case "CHARO" -> instr += "010100";
+            case "ADDR" -> instr += "011100";
+            case "SUBR" -> instr += "100000";
+            case "ANDR" -> instr += "100100";
+            case "ORR" -> instr += "101000";
+            case "CPR" -> instr += "101100";
+            case "LDR" -> instr += "110000";
+            case "STR" -> instr += "111000";
+            default -> exists = false;
+        }
+
+        if (mode.equals("I")) {
+            instr += "00";
+        } else if (mode.equals("D")) {
+            instr += "01";
+        } else {
+            instr += "11";
         }
 
         if (exists) {
-            hexList.add(hexTag + Integer.toHexString(addMode));
-
             StringBuilder hexBuild = new StringBuilder();
-            int valDec = Integer.parseInt(value);
-            String hexVal = Integer.toHexString(valDec);
-            hexBuild.append("0".repeat(Math.max(0, 4 - hexVal.length())));
-            hexBuild.append(hexVal);
+            binList.add(instr);
 
-            for (int i = 0; i < 4; i += 2) {
-                hexList.add(hexBuild.substring(i, i + 2).toUpperCase());
-            }
+            char tempChar = value.charAt(0);
+            int valDec;
+
+            if (tempChar == '\'')
+                valDec = value.charAt(1);
+            else
+                valDec = Integer.parseInt(value);
+
+            String binVal = Integer.toBinaryString(valDec);
+            hexBuild.append("0".repeat(Math.max(0, 16 - binVal.length())));
+            hexBuild.append(binVal);
+
+            for (int i = 0; i < 2; i++)
+                binList.add(hexBuild.substring(8 * i, 8 * i + 8));
         }
     }
 
     /**
-     * Generates the hexadecimal string associated with the instructions stored in
-     * the hexList arrayList. The offsetMap that determined the specific instruction
+     * Generates the binary string associated with the instructions stored in
+     * the binList arrayList. The offsetMap that determined the specific instruction
      * index is used to calculate the numerical offset and is added to the branch instruction
-     * hexcode.
+     * binary.
      *
-     * @return The hexadecimal code string converted from the original assembly source
+     * @return The binary code string converted from the original assembly source
      */
-    private String listToHexString() {
-        StringBuilder hexCode = new StringBuilder();
-        int spaces = 0;
+    private String listToBinString() {
+        StringBuilder binary = new StringBuilder();
 
-        for (int i = 0; i < hexList.size(); i++) {
-            if (hexList.get(i).contains("!")) {
-                String[] hexArr = hexList.get(i).split("!");
-
+        for (int i = 0; i < binList.size(); i++) {
+            if (binList.get(i).contains("!")) {
                 StringBuilder offsetBuild = new StringBuilder();
-                int offset = i + 3 - spaces;
+                int offset = i + 1;
 
-                for (String s : offsetMap.keySet()) {
-                    if (hexArr[1].equals(s)) {
-                        offset = offsetMap.get(s);
-                        break;
-                    }
+                String[] binArr = binList.get(i).split("!");
+
+                if (offsetMap.get(binArr[1]) != null)
+                    offset = offsetMap.get(binArr[1]);
+
+                String binVal = Integer.toBinaryString(offset);
+                offsetBuild.append(binArr[0]);
+                offsetBuild.append("0".repeat(Math.max(0, 16 - binVal.length())));
+                offsetBuild.append(binVal);
+
+                for (int j = 0; j < 3; j++) {
+                    binary.append(offsetBuild.substring(8 * j, 8 * j + 8));
+                    binary.append(" ");
                 }
 
-                String hexVal = Integer.toHexString(offset);
-                offsetBuild.append(hexArr[0]);
-                offsetBuild.append("0".repeat(Math.max(0, 4 - hexVal.length())));
-                offsetBuild.append(hexVal);
-                hexCode.append(offsetBuild.toString());
                 i += 2;
             } else {
-                if (hexList.get(i).equals(" ")) {
-                    spaces++;
-                }
-                hexCode.append(hexList.get(i));
+                binary.append(binList.get(i));
+                binary.append(" ");
             }
         }
 
-        return hexCode.toString();
+        return binary.toString();
     }
 }

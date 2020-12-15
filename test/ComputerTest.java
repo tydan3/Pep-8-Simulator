@@ -36,10 +36,6 @@ class ComputerTest {
 
 	@Test
 	void executeChOutDTest() {
-		System.out.println();
-		System.out.println("BLAHBLAHBLAHBLAH");
-		System.out.print("executeChOutDTest ");
-		
 		testComputer.loadWord("0101 0001 0000 0000 0000 0100"); //Output direct: ascii char K (#50) <- address 5
 		testComputer.loadWord("0000 0000"); //Stop
 		testComputer.loadWord("0000 0000 0100 1011"); //#50 -> address 5
@@ -227,6 +223,77 @@ class ComputerTest {
 		testComputer.execute();
 		System.out.println(testComputer.getPC().getValue2sComp());
 		assertEquals(20, testComputer.getPC().getValue2sComp());
+	}
+
+	@Test
+	void executeBRVTest() {
+		System.out.println();
+		System.out.print("executeBRVTest ");
+		testComputer.getCalculator().setVFlag(true);
+		testComputer.loadWord("0001 0010 0000 0000 0001 0100"); // Branch to PC = 20
+		testComputer.execute();
+		System.out.println(testComputer.getPC().getValue2sComp());
+		assertEquals(20, testComputer.getPC().getValue2sComp());
+	}
+
+	@Test
+	void executeBRLETest() {
+		System.out.println();
+		System.out.print("executeBRLETest ");
+		testComputer.loadWord("1100 0000 0000 0000 0000 1000"); // Load 8 into Accumulator
+		testComputer.loadWord("1011 0000 0000 0000 0001 0000"); // Compare A to 16 imm
+		testComputer.execute();
+		assertTrue(testComputer.getCalculator().getNFlag() || testComputer.getCalculator().getZFlag());
+	}
+
+	@Test
+	void executeBRLTTest() {
+		System.out.println();
+		System.out.print("executeBRLTTest ");
+		testComputer.loadWord("1100 0000 0000 0000 0000 1000"); // Load 8 into Accumulator
+		testComputer.loadWord("1011 0000 0000 0000 0001 0000"); // Compare A to 16 imm
+		testComputer.execute();
+		assertTrue(testComputer.getCalculator().getNFlag());
+	}
+
+	@Test
+	void executeBREQTest() {
+		System.out.println();
+		System.out.print("executeBREQTest ");
+		testComputer.loadWord("1100 0000 0000 0000 0000 1000"); // Load 8 into Accumulator
+		testComputer.loadWord("1011 0000 0000 0000 0000 1000"); // Compare A to 8 imm
+		testComputer.execute();
+		assertTrue(testComputer.getCalculator().getZFlag());
+	}
+
+	@Test
+	void executeBRNETest() {
+		System.out.println();
+		System.out.print("executeBRNETest ");
+		testComputer.loadWord("1100 0000 0000 0000 0000 1000"); // Load 8 into Accumulator
+		testComputer.loadWord("1011 0000 0000 0000 0001 0000"); // Compare A to 16 imm
+		testComputer.execute();
+		assertFalse(testComputer.getCalculator().getZFlag());
+	}
+
+	@Test
+	void executeBRGETest() {
+		System.out.println();
+		System.out.print("executeBRGETest ");
+		testComputer.loadWord("1100 0000 0000 0000 0000 1000"); // Load 8 into Accumulator
+		testComputer.loadWord("1011 0000 0000 0000 0000 0100"); // Compare A to 4 imm
+		testComputer.execute();
+		assertTrue(testComputer.getCalculator().getZFlag() || !testComputer.getCalculator().getNFlag());
+	}
+
+	@Test
+	void executeBRGTTest() {
+		System.out.println();
+		System.out.print("executeBRGTTest ");
+		testComputer.loadWord("1100 0000 0000 0000 0000 1000"); // Load 8 into Accumulator
+		testComputer.loadWord("1011 0000 0000 0000 0000 0100"); // Compare A to 4 imm
+		testComputer.execute();
+		assertTrue(!testComputer.getCalculator().getNFlag());
 	}
 	
 	@Test
