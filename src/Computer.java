@@ -151,6 +151,10 @@ public class Computer {
     public BitString getMemory(int theMemory) {
         return mMemory[theMemory];
     }
+    
+    public BitString[] getMemory() {
+    	return mMemory.clone();
+    }
 
     public String getOutput() {
         return output.toString();
@@ -502,7 +506,6 @@ public class Computer {
      * Executes the various opCodes loaded into memory
      */
     public void execute() {
-        int counter = 0;
         BitString specifierStr;
         int specifier;
         mPC.setValue(0);
@@ -606,12 +609,6 @@ public class Computer {
                     executeSt();		//Store
                     break;
                 case 0: 				//(specifier: 0000 0000)
-                    System.out.println("Memory:");
-                    for (BitString b: mMemory) {
-                        System.out.print("(" + counter +")" + "\t");
-                        System.out.println(b.getBits());
-                        counter++;
-                    }
                     return;				//Stop
             }
         }

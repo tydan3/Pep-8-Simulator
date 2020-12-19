@@ -2,9 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4449f18-3b95-444e-871f-4e8d867edb7c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/bin/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/bin/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/BitString.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/BitString.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Calculator.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Calculator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/CalculatorTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/CalculatorTest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Computer.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Computer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/ComputerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ComputerTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/MainFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/MainFrame$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/MainFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/MainFrame$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/MainFrame.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Computer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Computer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFrame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,6 +21,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1lUenv4MTSqW2R4ODg3punCNLlC" />
@@ -50,10 +64,16 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="304" y="196" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607832844994">
-      <screen x="0" y="25" width="1680" height="1025" />
-    </state>
-    <state x="304" y="196" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1680.1025/-116.-1415.2560.1415@0.25.1680.1025" timestamp="1607832844994" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
