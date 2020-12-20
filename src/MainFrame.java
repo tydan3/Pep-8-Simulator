@@ -21,7 +21,7 @@ public class MainFrame extends JFrame implements ActionListener {
      * constructor.
      */
     public MainFrame() {
-        super("Pep/8 Simulator Simulator");
+        super("Pep/8 Simulator");
         myComp = new Computer();
     }
     /**

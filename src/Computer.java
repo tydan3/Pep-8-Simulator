@@ -6,7 +6,7 @@
  */
 public class Computer {
 
-    private final static int MAX_MEMORY = 24; //Feel free to increase if necessary
+    private final static int MAX_MEMORY = 32; //Feel free to increase if necessary
 
     private Calculator bitCalc;
     private BitString mMemory[];
@@ -427,7 +427,7 @@ public class Computer {
 
     /**
      * Performs store the A register to the operand instruction.
-     * (specifier: 1110 0001)
+     * (specifier: 1110 0000)
      */
     public void executeSt() {
         BitString bitsA = mA.copy();
@@ -605,7 +605,7 @@ public class Computer {
                 case 193: 				//(specifier: 1100 0001)
                     executeLdD();		//Load Direct
                     break;
-                case 225:				//(specifier: 1110 0001)
+                case 224:				//(specifier: 1110 0000)
                     executeSt();		//Store
                     break;
                 case 0: 				//(specifier: 0000 0000)

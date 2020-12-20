@@ -325,7 +325,7 @@ class ComputerTest {
 		
 		testBitString.setBits("0000000001000100".toCharArray());
 		testComputer.setRegister(testBitString);
-		testComputer.loadWord("1110 0001 0000 0000 0000 1111");
+		testComputer.loadWord("1110 0000 0000 0000 0000 1111");
 		testComputer.execute();
 		assertTrue("0000000001000100".equals(testComputer.getMemory(15).toString() 
 				+ testComputer.getMemory(16).toString()));

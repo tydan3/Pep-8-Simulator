@@ -160,7 +160,7 @@ public class AssemblyConverter {
         }
 
         switch (opcode) {
-            case "CHARI" -> instr += "010010";
+//            case "CHARI" -> instr += "010010"; unsupported
             case "CHARO" -> instr += "010100";
             case "ADDR" -> instr += "011100";
             case "SUBR" -> instr += "100000";

@@ -2,18 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4449f18-3b95-444e-871f-4e8d867edb7c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/BitString.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/BitString.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Calculator.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Calculator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/CalculatorTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/CalculatorTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Computer.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Computer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/ComputerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/ComputerTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/MainFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/MainFrame$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/MainFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/MainFrame$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/MainFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Computer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Computer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFrame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +59,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
